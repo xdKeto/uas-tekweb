@@ -15,7 +15,7 @@ if (isset($_POST['nomorResi']) && isset($_POST['tanggal']) && isset($_POST['kota
     $kota = $_POST['kota'];
     $keterangan = $_POST['keterangan'];
 
-    $sql = "INSERT INTO detail (resi_no, tanggal, kota, keterangan) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO detail (no_resi, tanggal, kota, keterangan) VALUES (?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);
 
     if ($stmt) {

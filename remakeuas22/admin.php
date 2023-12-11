@@ -5,11 +5,17 @@ if (!isset($_SESSION["username"])) {
   header("Location:login.php");
   exit;
 }
+
+
+if(isset($_POST['no_res'])){
+    $_SESSION['resi'] = $_POST['no_res'];
+    exit();
+}
 require 'db_conn.php';
 
 
 // Insert
-if (isset($_POST['inputResi'])) {
+if (isset($_POST['inTgl']) && isset($_POST['inNo'])) {
     $inNo = $_POST['inNo'];
     $inTgl = $_POST['inTgl'];
 
@@ -31,7 +37,7 @@ if (isset($_POST['del_res'])) {
     $res = $_POST['del_res'];
 
     // Delete from 'detail' table
-    $sqlDeleteDetail = "DELETE FROM detail WHERE resi_no = ?";
+    $sqlDeleteDetail = "DELETE FROM detail WHERE no_resi = ?";
     $stmtDeleteDetail = mysqli_prepare($conn, $sqlDeleteDetail);
 
     if ($stmtDeleteDetail) {
@@ -103,21 +109,18 @@ if (isset($_POST['del_res'])) {
                 $('#entryLogModal').modal('show');
             });
 
-            $('#addEntryLogFormBtn').on('click', function (e) {
-                e.preventDefault();
+            $('#addEntryLogForm').on('submit', function (event) {
+                event.preventDefault();
+                console.log("AKSJDHLAKSJDH")
                 $.ajax({
                     type: 'post',
                     url: 'entry_log.php',
-                    data: $('#addEntryLogForm').serialize(),
+                    data: $(this).serialize(),
                     success: function (response) {
                         $('#entryLogModal').modal('hide');
                         alert('Data berhasil ditambahkan.');
-                        location.reload();
+                        header("Location: admin.php")
                     },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                        alert('AJAX request failed: ' + status);
-                    }
                 });
             });
         });
@@ -165,7 +168,7 @@ if (isset($_POST['del_res'])) {
                         <div class="mb-3" id="stat">
                         </div>
                         <div class="mb-3">
-                            <button type="submit" class="btn btn-primary" id="submit" name="inputResi">Submit</button>
+                            <button type="submit" class="btn btn-primary" id="submit">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -205,7 +208,7 @@ if (isset($_POST['del_res'])) {
                 </div>
                 <div class="modal-body">
                     <!-- Form untuk mengedit informasi pengguna -->
-                    <form id="addEntryLogForm">
+                    <form id="addEntryLogForm" action="">
                         <div class="mb-3">
                             <label for="editStock" class="form-label">Tanggal</label>
                             <input type="date" class="form-control" id="tanggal" name="tanggal"
@@ -223,7 +226,7 @@ if (isset($_POST['del_res'])) {
                                 required>
                         </div>
                         <input type="hidden" name="nomorResi" id="nomorResi"> 
-                        <button type="submit" class="btn btn-primary" id="addEntryLogFormBtn">Save Changes</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
                 </div>
             </div>

@@ -3,7 +3,7 @@ require "db_conn.php";
 if (isset($_POST['filter'])) {
     $nr = $_POST['filter'];
 
-    $sql = "SELECT * FROM detail WHERE resi_no = ?";
+    $sql = "SELECT * FROM detail WHERE no_resi = ?";
     $stmt = mysqli_prepare($conn, $sql);
 
     if ($stmt) {
